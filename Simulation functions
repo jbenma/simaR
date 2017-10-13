@@ -10,4 +10,102 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details at http://www.gnu.org/licenses/.
 
+
 ################### Simulation function ######################
+simData<-function(x,y,z) {  #x=data (means); y=number or samples to be simulated; z=number of curves to be simulated#
+  
+  # Creating an intermediate data.frame to allocate columns of simulated data; 1 column = 1 initial prey density #
+  New_Data<-as.data.frame(matrix(nrow=y,ncol=nrow(x)))
+  colnames(New_Data)<-x[,1]
+  New_Curves<-list()
+  
+  for(j in 1:z){  #j counts each new curve#
+    
+    #Simulating new data; i counts each new sample#
+    for (i in 1 : nrow(x)) {
+      New_Data[,i]<-rpois(y, lambda=x[i,2])
+    }
+    #Correcting new data - if the simulated value (Ncons) > Noffered, force Ncons = Noffered#
+    for (i in 1 : nrow(x)) {
+      New_Data[,i][New_Data[,i] > as.integer(colnames(New_Data))[i]] <- as.integer(colnames(New_Data))[i]
+    }
+    
+    # Reorganizing the new data in a list of data.frames #  
+    New_Curves[[j]]<- data.frame("Offered"=sort(as.integer(rep(colnames(New_Data),y))),"Consumed"=stack(New_Data)[,1])
+  }
+  return(New_Curves)
+}
+
+######################## Test function #######################
+newTests<-function(x){ #x=output of simData()#
+  library(frair)
+  New_Test<-list()
+  for(i in 1:length(x)){
+    New_Test[[i]]<-frair_test(x[[1]][,2]~x[[1]][,1], data=x[[1]])
+  }
+  return(New_Test)
+}
+
+###################### Fitting function ######################
+getFitData<-function(x,y){ "X=output of simData(); y=time of the experiment"
+    library(frair)
+    options(warn=-1)
+    New_Params<-list()
+  for(i in 1:length(x)){
+    New_Params[[i]]<-frair_fit(Consumed~Offered, data=x[[i]], response="rogersII",start=list(a = 0.001, h = 0.001), fixed=list(T=y))
+  }
+  return(New_Params)
+}
+
+###################### Plotting function (simulated functional responses) ######################
+plotCurves<-function(x,y,z){ #x=output of getFitData();y= x-axis max for plotting;z= y-axis max for plotting#
+  for(i in 1:length(x)){
+    plot(x[[i]],lty=i,pch=i,xlim=c(0,y),ylim=c(0,z),ylab=c(""),xlab=c(""),axes=F)
+    lines(x[[i]],lty=i) 
+    par(new=T)
+  }
+  plot(x[[1]],xlim=c(0,y),ylim=c(0,z),ylab=c("Number of prey consumed (N)"),xlab=c("Initial prey density (N)"),col=0)
+}
+
+################# Maximum attack rate function ################
+Max_attackRates<-function(x,y){ #x=a list of data.frames containing each simulated curve; y=time of the experiment#
+  
+  #new data.frame for each simulated attack rate#
+  simulated_attack_rates<-as.data.frame(matrix(nrow=length(x),ncol=1))
+  simulated_attack_rates<-data.frame(Attack_rate=simulated_attack_rates[,1])
+  
+  #new data.frame for allocate the calculated maximum attack rate#
+  Max_attackRates<-as.data.frame(matrix(nrow=length(x),ncol=1))
+  Max_attackRates<-data.frame(Max_attack_rate=Max_attackRates[,1])
+  
+  for(i in 1:length(x)){
+    simulated_attack_rates[i,]<-round(x[[i]][["fit"]]@details$par[2],digits=2) #Extracting the attack rate from the frair_fit output#
+  }
+  #Calculating the maximum attack rate for each curve (T/Th)#
+  Max_attackRates<- round(y/simulated_attack_rates,digits=2) #Calculating the maximum attack rate for each curve (T/Th)#
+  #Replacing infinites by NAs, supressing them and allocating the results on the its own data.frame#
+  Max_attackRates<-as.vector(na.omit(replace(Max_attackRates[,1],is.infinite(Max_attackRates[,1]),NA)))
+  
+  return(Max_attackRates)
+}
+
+############# Own_mean function for boot package ##############
+own_mean<-function(x,y) { ### Remember, the second argument of the function "boot" needs two parameters being the second one a vector of indices.
+  mean1 = mean(x[y])
+}
+
+######### Bootstrapping function using boot package ############
+MARbootstrapping<-function(x,y,z,w){ #x=output ob Max_attackRates(); y=number of bootstrapping replicates; z=level of confidence; w=type of CI#
+  library(plotrix)
+  library(boot)
+  boot_res<-as.vector(matrix(nrow=length(x),ncol=1))
+  
+  #bootstrapping the mean of the maximum attack rate#
+  boot_res<-boot(x, own_mean, R = y)
+  
+  #extracting the lower and upper limit of the confidence interval#
+  return(data.frame(li=as.vector(boot.ci(boot_res, conf=z, type=w)[[4]])[2],ui=as.vector(boot.ci(boot_res, conf=0.95, type="norm")[[4]])[3]))
+}
+###################################################################
+###################################################################
+###################################################################
