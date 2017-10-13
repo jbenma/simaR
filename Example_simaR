@@ -1,0 +1,20 @@
+install.packages("frair",dependencies = T)
+install.packages("boot",dependencies = T)
+install.packages("plotrix",dependencies = T)
+
+# Obtainig the 95% CI for the maximum attack rate from one empirical curve #
+
+source("simaR.R") #Loading the functions#
+Means<-data.frame(N = c(3,5,7,10,40),Means=c(1.25,2.5,3,5,6.5)) #Loading fake data at 6 prey densities#
+New_data<-simData(Means,10,100) #Simulating 100 curves with 10 samples per treatment (N)#
+newTests(New_data) #Performing the discrimination between type-II and type III responses#
+New_curves<-getFitData(New_data,24)  #Fitting the new data to a type-II response#
+plotCurves(New_curves,40,30) #Plotting the curves#
+New_rates<-Max_attackRates(New_curves,24) #Calculating the simulated maximum attak rates#
+Results<-MARbootstrapping(New_rates,999,0.95,"norm") #Bootstrapping the simulated maximum attak rates#
+par(family="serif",font=1,mar=c(5,5,1,2)) #Plotting the simulated-MAR and its confidence intervals#
+plotCI(1, mean(New_rates), ui=Results$ui,li=Results$li,
+       xaxt = "n",xlab="",ylab=c("Simulated maximum attack rate mean (T/Th)"),
+       gap=T,pt.bg=par("bg"),pch=16)
+axis(labels=c("Treatment"),side=1,tck=-0.03,at=1,las=2)
+#############################################################################
