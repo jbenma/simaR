@@ -106,6 +106,4 @@ MARbootstrapping<-function(x,y,z,w){ #x=output ob Max_attackRates(); y=number of
   #extracting the lower and upper limit of the confidence interval#
   return(data.frame(li=as.vector(boot.ci(boot_res, conf=z, type=w)[[4]])[2],ui=as.vector(boot.ci(boot_res, conf=0.95, type="norm")[[4]])[3]))
 }
-###################################################################
-###################################################################
-###################################################################
+######################################################################################################################################
