@@ -1,4 +1,4 @@
-# Copyright (C) 2017 Jacinto Benhadi Marín
+# Copyright (C) 2017 Jacinto Benhadi MarÃ­n
   
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -10,8 +10,12 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details at http://www.gnu.org/licenses/.
 
+
 ################### Simulation function ######################
-simData<-function(x,y,z) {  #x=data (means); y=number or samples to be simulated; z=number of curves to be simulated#
+simData<-function(x,y,z) {  
+  # x: an object (table) of two columns, the first one containing the number of prey offered in each treatment and the second one containing the mean of the experimental data i.e. the mean number of consumed prey items for each corresponding initial prey density.
+  # y: number of samples per N to be simulated.
+  # z: number of curves to be simulated.
   
   # Creating an intermediate data.frame to allocate columns of simulated data; 1 column = 1 initial prey density #
   New_Data<-as.data.frame(matrix(nrow=y,ncol=nrow(x)))
@@ -36,7 +40,9 @@ simData<-function(x,y,z) {  #x=data (means); y=number or samples to be simulated
 }
 
 ######################## Test function #######################
-newTests<-function(x){ #x=output of simData()#
+newTests<-function(x){ 
+  # x: an object containing the output of simData()
+  
   library(frair)
   New_Test<-list()
   for(i in 1:length(x)){
@@ -44,19 +50,12 @@ newTests<-function(x){ #x=output of simData()#
   }
   return(New_Test)
 }
-###########################################################################
-
-# New_Test2<-as.data.frame(matrix(nrow=length(New_Curves),ncol=1))
-# for(i in 1:length(New_Curves)){
-#   New_Test2[i,]<-data.frame(capture.output(print(New_Test[[i]])))[4,]
-# }
-# New_Test2
-
-#### NA= TypeI / 6 = TypeII / x = TypeIII ####
-
 
 ###################### Fitting function ######################
-getFitData<-function(x,y){ "X=output of simData(); y=time of the experiment"
+getFitData<-function(x,y){
+  # x: an object containing the output of simData()
+  # y: the time of the experiment (T)
+  
     library(frair)
     options(warn=-1)
     New_Params<-list()
@@ -67,7 +66,11 @@ getFitData<-function(x,y){ "X=output of simData(); y=time of the experiment"
 }
 
 ###################### Plotting function ######################
-plotCurves<-function(x,y,z){ #x=output of getFitData();y= x-axis max for plotting;z= y-axis max for plotting#
+plotCurves<-function(x,y,z){
+  # x: an object containing the output of getFitData()
+  # y: upper limit for the X-axis
+  # z: upper limit for the Y-axis
+  
   for(i in 1:length(x)){
     plot(x[[i]],lty=i,pch=i,xlim=c(0,y),ylim=c(0,z),ylab=c(""),xlab=c(""),axes=F)
     lines(x[[i]],lty=i) 
@@ -77,7 +80,9 @@ plotCurves<-function(x,y,z){ #x=output of getFitData();y= x-axis max for plottin
 }
 
 ################# Maximum attack rate function ################
-Max_attackRates<-function(x,y){ #x=a list of data.frames containing each simulated curve; y=time of the experiment#
+Max_attackRates<-function(x,y){
+  # x: an object containing the output of getFitData()
+  # y: the time of the experiment (T)
   
   #new data.frame for each simulated attack rate#
   simulated_attack_rates<-as.data.frame(matrix(nrow=length(x),ncol=1))
@@ -99,12 +104,21 @@ Max_attackRates<-function(x,y){ #x=a list of data.frames containing each simulat
 }
 
 ############# Own_mean function for boot package ##############
-own_mean<-function(x,y) { ### Remember, the second argument of the function "boot" needs two parameters being the second one a vector of indices.
+own_mean<-function(x,y) { 
+  # x: a vector with the means that will be used by MARbootstrapping()
+  # y: a second argument required by the boot function from boot package.
+  
+  ### Remember, the second argument of the function "boot" needs two parameters being the second one a vector of indices.
   mean1 = mean(x[y])
 }
 
 ######### Bootstrapping function from boot package ############
 MARbootstrapping<-function(x,y,z,w){ #x=output ob Max_attackRates(); y=number of bootstrapping replicates; z=level of confidence; w=type of CI#
+  # x: an object containing the output of Max_attackRates()
+  # y: the number of bootstrap replicates.
+  # z: the confidence level of the required interval.
+  # w: A vector of character strings representing the type of intervals asked by the function boot.ci from boot package: "norm","basic", "stud", "perc", "bca".
+  
   library(plotrix)
   library(boot)
   boot_res<-as.vector(matrix(nrow=length(x),ncol=1))
