@@ -6,7 +6,7 @@ install.packages("plotrix",dependencies = T)
 
 source("simaR.R") #Loading the functions#
 Means<-data.frame(N = c(3,5,7,10,40),Means=c(1.25,2.5,3,5,6.5)) #Loading fake data at 5 prey densities#
-New_data<-simData(Means,10,1000) #Simulating 100 curves with 10 samples per treatment (N)#
+New_data<-simData(Means,10,1000) #Simulating 1000 curves with 10 samples per treatment (N)#
 newTests(New_data) #Performing the discrimination between type-II and type III responses#
 New_curves<-getFitData(New_data,24)  #Fitting the new data to a type-II response#
 plotCurves(New_curves,40,30) #Plotting the curves#
