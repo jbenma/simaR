@@ -1,3 +1,4 @@
+# simaR version 1.0 (2-10-2017)
 # Copyright (C) 2017 Jacinto Benhadi Marín
   
 # This program is free software: you can redistribute it and/or modify
@@ -9,7 +10,9 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details at http://www.gnu.org/licenses/.
-
+#
+# Citation: Benhadi-Marín, J., 2017. "simaR: an R library to simulate functional responses". Available at: https://github.com/jbenma/simaR/edit/Simulation-functions. Version of access. Date.
+#
 
 ################### Simulation function ######################
 simData<-function(x,y,z) {  
