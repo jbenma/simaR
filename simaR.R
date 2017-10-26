@@ -12,7 +12,7 @@
 # GNU General Public License for more details at http://www.gnu.org/licenses/.
 #
 # Citation: 
-# "Benhadi-Marín, J., 2017. simaR: an R library to simulate functional responses. 
+# "Benhadi-Marín, J., 2017. simaR: an R library to simulate functional responses. DOI:10.5281/zenodo.1030152
 # Available at: https://github.com/jbenma/simaR/edit/Simulation-functions. Version of access: Date:"
 
 ################### Simulation function ######################
