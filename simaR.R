@@ -117,7 +117,7 @@ own_mean<-function(x,y) {
 }
 
 ######### Bootstrapping function from boot package ############
-MARbootstrapping<-function(x,y,z,w){ #x=output ob Max_attackRates(); y=number of bootstrapping replicates; z=level of confidence; w=type of CI#
+MARbootstrapping<-function(x,y,z,w){ #x=output of Max_attackRates(); y=number of bootstrapping replicates; z=level of confidence; w=type of CI#
   # x: an object containing the output of Max_attackRates()
   # y: the number of bootstrap replicates.
   # z: the confidence level of the required interval.
