@@ -37,10 +37,10 @@ newTests(New_Curves_real77r) #Testing the type of functional response #
 ######## Is q > 0? If so, then type-III #############
 #####################################################
 
-nuevos_datos_real77r<-getFitData(New_Curves_real77r,24,"flexpnr",30)  #Fitting the new data with real77r (previously flexpr)#
-#Depending on the version of "frair" real77 and real77r may not work, if so, try flexp and flepxnr#
-# Extracting the fitting stats of each simulated curve
+nuevos_datos_real77r<-getFitData(New_Curves_real77r,24,"real77r",30)  #Fitting the new data with real77r#
+#Depending on the version of "frair" real77 and real77r will not work, if so, try flexp and flepxnr that are exactly the same#
 
+# Extracting the fitting stats of each simulated curve
 summaries<-list()
 for(i in 1:length(nuevos_datos_real77r)){ 
   summaries[[i]]<-summary(nuevos_datos_real77r[[i]]$fit)
