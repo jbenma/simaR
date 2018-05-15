@@ -37,9 +37,10 @@ newTests(New_Curves_real77r) #Testing the type of functional response #
 ######## Is q > 0? If so, then type-III #############
 #####################################################
 
-nuevos_datos_real77r<-getFitData(New_Curves_real77r,24,"real77r",30)  #Fitting the new data with real77r (previously flexpr)#
-
+nuevos_datos_real77r<-getFitData(New_Curves_real77r,24,"flexpnr",30)  #Fitting the new data with real77r (previously flexpr)#
+#Depending on the version of "frair" real77 and real77r may not work, if so, try flexp and flepxnr#
 # Extracting the fitting stats of each simulated curve
+
 summaries<-list()
 for(i in 1:length(nuevos_datos_real77r)){ 
   summaries[[i]]<-summary(nuevos_datos_real77r[[i]]$fit)
@@ -52,7 +53,7 @@ for(i in 1:length(nuevos_datos_real77r)){
   qs[[i,1]]<-summaries[[i]]@coef[2]
 }
 qs
-plot(qs,xlim=c(-1,2),pch=16) ###Yeap, type-III###
+plot(qs,xlim=c(-1,2),pch=16) ###Yeap, type-III, remember to check for outliers###
 
 rates_real77r<-Max_attackRates(nuevos_datos_real77r,24,"real77r")   #Extracting the simulated maximum attack rates#
 match(boxplot.stats(rates_real77r)$out,rates_real77r)
