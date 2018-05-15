@@ -13,10 +13,10 @@
 ################### Simulation function ######################
 simData<-function(x,y,z) {  
   # x: an object (table) of two columns, the first one containing the number of prey offered 
-  # in each treatment and the second one containing the proportion of prey consumed. 
+  # in each treatment and the second one containing the mean proportion of prey consumed. 
   # items for each corresponding initial prey density.
   # y: number of samples per N to be simulated.
-  # z: number of curves to be simulated.
+  # z: number of curves (replicates) to be simulated.
   
   # Creating an intermediate data.frame to allocate columns of simulated data; 1 column = 1 initial prey density #
   New_Data<-as.data.frame(matrix(nrow=y,ncol=nrow(x)))
@@ -45,6 +45,22 @@ newTests<-function(x){
   }
   return(New_Test)
 }
+
+
+# Types of response in "frair" used by simaR_v06 -> new version!!! flexp now is real77 but both are implemented in simaR_v06
+
+# Response    Replacement?  Parameters  Description                                            
+# ----------  ------------  ----------  -----------------------------------------------------  
+# hollingsII  Yes           X,a,h,T     Holling's original type II function                    
+# rogersII    No            X,a,h,T     Roger's type II decreasing prey function               
+# hassIII     Yes           X,b,c,h,T   Hassell's original type III function                   
+# hassIIInr   No            X,b,c,h,T   Hassell's type III function, not assuming replacement  
+# emdII       No            X,a,h,P,T   Ecological Models and Data in R type II function       
+# real77      Yes           X,b,q,h,T   Flexible exponent model, assuming replacement          
+# real77r     No            X,b,q,h,T   Flexible exponent model, not assuming replacement      
+# flexp       Yes           X,b,q,h,T   Flexible exponent model, assuming replacement          
+# flexpnr     No            X,b,q,h,T   Flexible exponent model, not assuming replacement 
+
 
 ###################### Fitting function ######################
 getFitData<-function(x,y,z,Ne,NPred){
@@ -87,7 +103,6 @@ getFitData<-function(x,y,z,Ne,NPred){
       New_Params[[i]]<-frair_fit(Consumed~Offered, data=x[[i]], response="emdII",start=list(a=0.001,h = T/Ne), fixed=list(T=y,P=NPred))
     }
   }
-  
   if(z=="flexp") {
     for(i in 1:length(x)){
       New_Params[[i]]<-frair_fit(Consumed~Offered, data=x[[i]], response="flexp",start=list(b=0.001,q=0,h = T/Ne), fixed=list(T=y))
@@ -100,18 +115,20 @@ getFitData<-function(x,y,z,Ne,NPred){
     }
   }
   
+  if(z=="real77") {
+    for(i in 1:length(x)){
+      New_Params[[i]]<-frair_fit(Consumed~Offered, data=x[[i]], response="real77",start=list(b=0.001,q=0,h = T/Ne), fixed=list(T=y))
+    }
+  }
+  
+  if(z=="real77r") {
+    for(i in 1:length(x)){
+      New_Params[[i]]<-frair_fit(Consumed~Offered, data=x[[i]], response="real77r",start=list(b=0.001,q=0,h = T/Ne), fixed=list(T=y))
+    }
+  }
+  
   return(New_Params)
 }
-
-# Response    Replacement?  Parameters  Description                                            
-# ----------  ------------  ----------  -----------------------------------------------------  
-# hollingsII  Yes           X,a,h,T     Holling's original type II function                    
-# rogersII    No            X,a,h,T     Roger's type II decreasing prey function               
-# hassIII     Yes           X,b,c,h,T   Hassell's original type III function                   
-# hassIIInr   No            X,b,c,h,T   Hassell's type III function, not assuming replacement  
-# emdII       No            X,a,h,P,T   Ecological Models and Data in R type II function       
-# flexp       Yes           X,b,q,h,T   Flexible exponent model, assuming replacement          
-# flexpnr     No            X,b,q,h,T   Flexible exponent model, not assuming replacement      
 
 
 ###################### Plotting function ######################
@@ -181,7 +198,7 @@ Max_attackRates<-function(x,y,z){
     Max_attackRates<- round(y/simulated_attack_rates,digits=4) #Calculating the maximum attack rate for each curve (T/Th)#
   }
   
-  if(z=="flexp"){
+  if(z=="real77"){
     for(i in 1:length(x)){
       simulated_attack_rates[i,]<-round(x[[i]][["fit"]]@details$par[3],digits=4) #Extracting the attack rate from the frair_fit output#
     }
@@ -189,7 +206,7 @@ Max_attackRates<-function(x,y,z){
     Max_attackRates<- round(y/simulated_attack_rates,digits=4) #Calculating the maximum attack rate for each curve (T/Th)#
   }
   
-  if(z=="flexpnr"){
+  if(z=="real77r"){
     for(i in 1:length(x)){
       simulated_attack_rates[i,]<-round(x[[i]][["fit"]]@details$par[3],digits=4) #Extracting the attack rate from the frair_fit output#
     }
@@ -226,3 +243,4 @@ MARbootstrapping<-function(x,y,z,w){
   #extracting the lower and upper limit of the confidence interval#
   return(data.frame(li=as.vector(boot.ci(boot_res, conf=z, type=w)[[4]])[2],ui=as.vector(boot.ci(boot_res, conf=0.95, type="norm")[[4]])[3]))
 }
+
