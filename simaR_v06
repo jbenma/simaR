@@ -13,8 +13,7 @@
 ################### Simulation function ######################
 simData<-function(x,y,z) {  
   # x: an object (table) of two columns, the first one containing the number of prey offered 
-  # in each treatment and the second one containing the mean proportion of prey consumed. 
-  # items for each corresponding initial prey density.
+  # in each treatment and the second one containing the mean proportion of prey consumed items for each corresponding initial prey density.
   # y: number of samples per N to be simulated.
   # z: number of curves (replicates) to be simulated.
   
