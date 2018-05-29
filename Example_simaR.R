@@ -11,7 +11,7 @@ newTests(New_data) #Performing the discrimination between type-II and type III r
 New_curves<-getFitData(New_data,24,"rogersII",6.5) #Fitting the new data to a type-II response#
 plotCurves(New_curves,40,30) #Plotting the curves#
 New_rates<-Max_attackRates(New_curves,24,"rogersII") #Calculating the simulated maximum attak rates#
-#match(boxplot.stats(New_rates)$out,rates_real77r) #trick to check for outliers
+#match(boxplot.stats(New_rates)$out,New_rates) #trick to check for outliers
 Results<-MARbootstrapping(New_rates,999,0.95,"norm") #Bootstrapping the simulated maximum attak rates#
 
 par(family="serif",font=1,mar=c(5,5,1,2)) #Plotting the simulated-MAR and its confidence intervals#
