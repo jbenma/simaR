@@ -145,7 +145,7 @@ plotCurves<-function(x,y,z){
 
 ################# Maximum attack rate function ################
 Max_attackRates<-function(x,y,z){
-  # x: an object containing the output of clean_SimData()
+  # x: an object containing the output of getFitData()
   # y: the time of the experiment (T)
   # z: type of functional response ( see frair_responses() )
   
