@@ -1,7 +1,8 @@
 # simaR
-Simulation of functional response experiments
+Simulation of functional response experiments.
 
 simaR is composed by six core functions used sequentially:
+
 
 simData() -> Simulation of datasets.
 
@@ -16,7 +17,10 @@ Max_attackRates() -> Calculation of the maximum attack rate for each simulated f
 MARbootstrapping() -> Bootstrapping of the mean maximum attack rate and calculation of its confidence interval.
 
 
+
 See how to deal with outliers at the help source using ?getFitData
+
+
 
 Reference:
 Benhadi-Marin, J., Pereira, J.A., Barreales, D., Sousa, J.P. & Santos, S.A.P., 2018. A simulation-based method 
