@@ -1,7 +1,7 @@
 library(plotrix) # Useful to plot CI´s
 
 #### Fitting type-II ####
-source("simaR_v06.R") #Loading the functions#
+library(simaR) #Loading the functions#
 
 Means<-data.frame(N = c(3,5,7,20,40),Means=c(1.25,2.5,3,5,6.5)) #Loading fake data at 5 initial prey densities#
 plot(Means,pch=16)
