@@ -2,6 +2,7 @@
 Simulation of functional response experiments.
 
 simaR is composed by six core functions used sequentially:
+---------------------------------------------------------------------
 
 
 simData() -> Simulation of datasets.
