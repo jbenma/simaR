@@ -19,7 +19,7 @@ MARbootstrapping() -> Bootstrapping of the mean maximum attack rate and calculat
 
 ---------------------------------------------------------------------
 
-See how to deal with outliers at the help source using ?getFitData
+See how to deal with outliers at the help source using ?Max_attackRates
 
 ---------------------------------------------------------------------
 
