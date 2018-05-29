@@ -18,6 +18,8 @@ Max_attackRates() -> Calculation of the maximum attack rate for each simulated f
 MARbootstrapping() -> Bootstrapping of the mean maximum attack rate and calculation of its confidence interval.
 
 ---------------------------------------------------------------------
+Download the "simaR.rar" file, unzip it, and place it into your R directory of libraries
+---------------------------------------------------------------------
 
 See how to deal with outliers at the help source using ?Max_attackRates
 
